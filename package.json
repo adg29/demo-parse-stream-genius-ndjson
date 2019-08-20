@@ -15,6 +15,12 @@
     "jest": "^24.9.0",
     "nodemon": "^1.19.1"
   },
+  "nodemonConfig": {
+    "ignore": [
+      "output*.json",
+      "output*.txt"
+    ]
+  },
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
     "test": "jest"
