@@ -4,14 +4,19 @@
   "directories": {
     "test": "tests"
   },
-  "dependencies": {},
+  "dependencies": {
+    "stream-json": "^1.3.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "babel-jest": "^24.9.0",
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.1"
   },
   "scripts": {
+    "start": "nodemon --exec babel-node src/index.js",
     "test": "jest"
   },
   "keywords": [],
