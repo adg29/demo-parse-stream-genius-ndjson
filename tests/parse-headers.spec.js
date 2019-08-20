@@ -1,3 +1,5 @@
+'use strict'
+
 import { scenarios as HEADERS } from './data/headers'
 import { matchHeaders } from '../src/parse/headers'
 

@@ -1,3 +1,5 @@
+'use strict'
+
 import { scenarios as SONGS } from './data/songs-3-truncated-lyrics_text'
 import { countSections, attributeSections } from '../src/parse/sections'
 

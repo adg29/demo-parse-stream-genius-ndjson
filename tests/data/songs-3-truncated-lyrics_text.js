@@ -1,3 +1,5 @@
+'use strict'
+
 export const scenarios = {
     ARTISTS: {
         INVALID: 

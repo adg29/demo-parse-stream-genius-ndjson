@@ -1,3 +1,5 @@
+'use strict'
+
 export const scenarios = {
     NOUN: [
         "[Intro: Billy Ray Cyrus]",
