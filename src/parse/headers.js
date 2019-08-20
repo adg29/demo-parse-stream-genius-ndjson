@@ -1,3 +1,5 @@
+'use strict'
+
 const HEADER_MATCH_REGEX = /\[(.*?)\]/g
 
 export const matchHeaders = (text) => {
