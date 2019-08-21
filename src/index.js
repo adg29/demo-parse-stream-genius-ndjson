@@ -1,5 +1,6 @@
 'use strict'
 
+
 import { processJSON } from './stream'
 import path from 'path'
 
@@ -13,10 +14,9 @@ import path from 'path'
     const lyric_words = []
 
     let msg = 'Processing json...'
-    let { countProcessedObjects, attributions } = await processJSON(filepath)
+    let { jsonAnalysis } = await processJSON(filepath)
 
-    msg = `Processed ${countProcessedObjects} objects via ${filename} stream`
-    console.log(msg)
+    let attributions = jsonAnalysis.artistAttributions
 
     msg = `Artist attribution counts: ${JSON.stringify(attributions, null, 5)}`
     console.log(msg)
@@ -24,7 +24,10 @@ import path from 'path'
     let attributionsRanked = Object.keys(attributions)
     .sort((a, b) => attributions[b] - attributions[a])
     .map(a => ({artist: a, attributions: attributions[a]}))
-    msg = `Ranked artist by attributions count: ${JSON.stringify(attributionsRanked, null, 5)}`
+    msg = `Ranked artist by attributions count: ${JSON.stringify(attributionsRanked.slice(0, 5), null, 5)}`
+    console.log(msg)
+
+    msg = `Processed ${jsonAnalysis.songs} objects via ${filename} stream`
     console.log(msg)
 
 })().catch(err => {
