@@ -7,7 +7,7 @@ import path from 'path'
 
 const run = async () => {
 
-    const TIME_LABEL = 'Finished in:' 
+    const TIME_LABEL = 'Finished in' 
     console.time(TIME_LABEL)
 
     let filename = '../data/songs.json'
