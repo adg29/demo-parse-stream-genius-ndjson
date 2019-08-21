@@ -2,6 +2,7 @@
 
 
 import { processJSON } from './stream'
+import { analyzeSongs } from './analyze'
 import path from 'path'
 
 (async () => {
@@ -14,7 +15,7 @@ import path from 'path'
     const lyric_words = []
 
     let msg = 'Processing json...'
-    let { jsonAnalysis } = await processJSON(filepath)
+    let { jsonAnalysis } = await processJSON(filepath, { analyzeSongs })
 
     let attributions = jsonAnalysis.artistAttributions
 
