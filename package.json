@@ -18,7 +18,8 @@
   "nodemonConfig": {
     "ignore": [
       "output*.json",
-      "output*.txt"
+      "output*.txt",
+      "tests/results/*"
     ]
   },
   "scripts": {
