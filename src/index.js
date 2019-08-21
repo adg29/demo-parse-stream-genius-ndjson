@@ -17,7 +17,8 @@ const run = async () => {
     const lyric_sections = []
     const lyric_words = []
 
-    let msg = 'Processing json...'
+    let msg = `Processing json ${filename}...`
+    console.log(msg)
     let { jsonAnalysis } = await processJSON(filepath, { analyzeSongs })
 
     let attributions = jsonAnalysis.artistAttributions
@@ -26,8 +27,9 @@ const run = async () => {
     console.log(msg)
 
     let attributionsRanked = Object.keys(attributions)
-    .sort((a, b) => attributions[b] - attributions[a])
-    .map(a => ({artist: a, attributions: attributions[a]}))
+        .sort((a, b) => attributions[b] - attributions[a])
+        .map(a => ({artist: a, attributions: attributions[a]}))
+
     msg = `Ranked artist by attributions count: ${JSON.stringify(attributionsRanked.slice(0, 5), null, 5)}`
     console.log(msg)
 
