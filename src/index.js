@@ -5,7 +5,10 @@ import { processJSON } from './stream'
 import { analyzeSongs } from './analyze'
 import path from 'path'
 
-(async () => {
+const run = async () => {
+
+    const TIME_LABEL = 'Finished in:' 
+    console.time(TIME_LABEL)
 
     let filename = '../data/songs.json'
     let filepath = path.join(__dirname, filename)
@@ -31,7 +34,11 @@ import path from 'path'
     msg = `Processed ${jsonAnalysis.songs} objects via ${filename} stream`
     console.log(msg)
 
-})().catch(err => {
-    console.error(err);
-})
+    console.timeEnd(TIME_LABEL)
+}
 
+try {
+    run()
+} catch(err) {
+    console.error(err);
+}

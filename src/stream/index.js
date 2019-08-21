@@ -6,7 +6,7 @@ const { parser } = require('stream-json')
 const { Transform } = require('stream')
 const { streamArray } = require('stream-json/streamers/StreamArray')
 
-const TIME_LABEL = 'time of json stream processing pipeline' 
+const TIME_LABEL = 'Processed json stream pipeline in' 
 
 export function processJSON(filepath, { analyzeSongs }) {
     console.time(TIME_LABEL)
