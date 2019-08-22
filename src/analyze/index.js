@@ -40,7 +40,7 @@ export const analyzeSongs = () => {
             console.timeEnd('Matched headers in')
 
             console.time('Predicted collaborators from headers in')
-            let { predictions } = nlpArtists(headersMatched.join(" "))
+            let { predictions } = nlpArtists(headersMatched.join("\n"))
             predictions.forEach(featured => {
                 if (collaborators[featured]) {
                     collaborators[featured] += 1
@@ -48,7 +48,7 @@ export const analyzeSongs = () => {
                     collaborators[featured] = 0
                 }
             })
-            console.log(`${predictions.length} from ${headersMatched.join(" ")}`)
+            console.log(`${predictions.length} from ${headersMatched.join("\n")}`)
             console.log(`${JSON.stringify(predictions, null, 5)}`)
             console.timeEnd('Predicted collaborators from headers in')
 

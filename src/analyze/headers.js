@@ -4,7 +4,7 @@ const nlp = require('compromise')
 
 
 export const nlpArtists = (header) => {
-    let doc = nlp(header)
+    let doc = nlp(header).normalize()
     // let capitals= doc.clauses().match('#TitleCase+ !(&+)')
     let persons = doc.clauses().match('!(verse|hook|chorus|intro|bridge|outro|+|and|&) (#Person|lil #Person+|. #Person+)+')
     return {
