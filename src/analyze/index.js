@@ -45,7 +45,7 @@ export const analyzeSongs = () => {
                 if (collaborators[featured]) {
                     collaborators[featured] += 1
                 } else {
-                    collaborators[featured] = 0
+                    collaborators[featured] = 1
                 }
             })
             console.log(`${predictions.length} from ${headersMatched.join("\n")}`)
