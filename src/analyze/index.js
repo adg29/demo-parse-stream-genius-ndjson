@@ -16,16 +16,15 @@ const analysisSchema = {
 
 export const analyzeSongs = () => {
     return fold((analysisAggregate, {key, value}) => {
-        console.log('analysisAggregate')
-        console.log(analysisAggregate)
         let song = value
+        // console.time(`Analyzed ${key} song ${song.title} in`) 
+
         let attributions = analysisAggregate.artistAttributions
         let collaborators = analysisAggregate.collaborators
         let headers = analysisAggregate.headers
 
         let headersMatched = null
         if (song) {
-            // console.log(`${key} song ${song.title}`) 
 
             let artist = attributeSections(song)
             let sections = countSections(song.lyrics_text)
