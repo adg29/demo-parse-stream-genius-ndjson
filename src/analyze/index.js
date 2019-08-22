@@ -1,7 +1,7 @@
 'use strict'
 
 import fold from 'stream-chain/utils/fold'
-import { attributeSections, countSections } from '../parse/sections'
+import { attributeSections, matchSections, countSections } from '../parse/sections'
 import { matchHeaders } from '../parse/headers'
 import { nlpArtists } from './headers'
 
@@ -26,39 +26,49 @@ export const analyzeSongs = () => {
         let headersMatched = null
         if (song) {
 
+            let sections = matchSections(song.lyrics_text)
             let artist = attributeSections(song)
-            let sections = countSections(song.lyrics_text)
+
+            console.log('matchSections')
+            console.log(sections)
 
             if (attributions[artist]) {
-                attributions[artist] += sections
+                attributions[artist] += sections.length
             } else {
-                attributions[artist] = sections
+                attributions[artist] = sections.length
             }
 
-            console.time('Matched headers in')
-            headersMatched = matchHeaders(song.lyrics_text)
-            console.log(`${headersMatched.length} headers in ${song.title}`)
-            headersMatched.forEach(header => {
-                if (headers[header]) {
-                    headers[header] += 1
-                } else {
-                    headers[header] = 1
-                }
-            })
-            console.timeEnd('Matched headers in')
+            //attribute collaborators per section
+            sections.forEach((section, i) => {
+                console.time(`Matched headers in section ${i}`)
+                console.log(section)
+                headersMatched = matchHeaders(section)
+                console.log(`${headersMatched.length} headers in ${song.title}`)
 
-            console.time('Predicted collaborators from headers in')
-            let { predictions } = nlpArtists(headersMatched.join("\n"))
-            predictions.forEach(featured => {
-                if (collaborators[featured]) {
-                    collaborators[featured] += 1
-                } else {
-                    collaborators[featured] = 1
-                }
+                //global headers store, sans nlp
+                headersMatched.forEach(header => {
+                    if (headers[header]) {
+                        headers[header] += 1
+                    } else {
+                        headers[header] = 1
+                    }
+                })
+                console.timeEnd(`Matched headers in section ${i}`)
+
+                console.time('Predicted collaborators from headers in')
+                let { predictions } = nlpArtists(headersMatched.join("\n"))
+                predictions.forEach(featured => {
+                    if (collaborators[featured]) {
+                        collaborators[featured] += 1
+                    } else {
+                        collaborators[featured] = 1
+                    }
+                })
+                console.log(`${predictions.length} from ${headersMatched.join("\n")}`)
+                console.log(`${JSON.stringify(predictions, null, 5)}`)
+                console.timeEnd('Predicted collaborators from headers in')
+
             })
-            // console.log(`${predictions.length} from ${headersMatched.join("\n")}`)
-            // console.log(`${JSON.stringify(predictions, null, 5)}`)
-            console.timeEnd('Predicted collaborators from headers in')
 
             analysisAggregate.songs++
         } else {
