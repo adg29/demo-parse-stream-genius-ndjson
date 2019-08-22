@@ -80,15 +80,23 @@ export const analyzeSongs = () => {
 }
 
 
-export const sampleIndices = new Set();
-while(sampleIndices.size !== 10) {
-  sampleIndices.add(Math.floor(Math.random() * 2000) + 1);
-}
 
-export const analyzeSample = () => {
-    return ({key, value}) => {
-        if (sampleIndices.has(key)) return {key, value}
-        else return null
+export const analyzeSample = ({RANDOM = false, SAMPLE_SIZE = 10, STREAM_SIZE = 2000} = {}) => {
+    if (RANDOM) {
+        const sampleIndices = new Set();
+        while(sampleIndices.size !== SAMPLE_SIZE) {
+          sampleIndices.add(Math.floor(Math.random() * STREAM_SIZE) + 1);
+        }
+
+        return ({key, value}) => {
+            if (sampleIndices.has(key)) return {key, value}
+            else return null
+        }
+    } else {
+        return ({key, value}) => {
+            if (key < SAMPLE_SIZE) return {key, value}
+            else return null
+        }
     }
 }
 

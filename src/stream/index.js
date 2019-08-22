@@ -18,7 +18,10 @@ export function processJSON(filepath, { analyzeSongs, analyzeSample }) {
             dataStreamSource,
             parser(),
             streamArray(),
-            analyzeSample(),
+            analyzeSample({
+                RANDOM: true,
+                SAMPLE_SIZE: 20,
+            }),
             analyzeSongs(),
             new Transform({
                 writableObjectMode: true,
