@@ -18,7 +18,7 @@ export function processJSON(filepath, { analyzeSongs, analyzeSample }) {
             dataStreamSource,
             parser(),
             streamArray(),
-            // analyzeSample(),
+            analyzeSample(),
             analyzeSongs(),
             new Transform({
                 writableObjectMode: true,

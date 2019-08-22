@@ -29,9 +29,6 @@ export const analyzeSongs = () => {
             let sections = matchSections(song.lyrics_text)
             let artist = attributeSections(song)
 
-            console.log('matchSections')
-            console.log(sections)
-
             if (attributions[artist]) {
                 attributions[artist] += sections.length
             } else {
@@ -41,7 +38,6 @@ export const analyzeSongs = () => {
             //attribute collaborators per section
             sections.forEach((section, i) => {
                 console.time(`Matched headers in section ${i}`)
-                console.log(section)
                 headersMatched = matchHeaders(section)
                 console.log(`${headersMatched.length} headers in ${song.title}`)
 
