@@ -1,16 +1,72 @@
-Thank you taking our Genius take‑home interview challenge! The goal of this assignment is to, as best as possible, simulate a problem that you might actually work on at Genius, with as close as possible to the same working conditions that you’d have at Genius.
+# Scaling the analysis of song metadata
 
-With that in mind, you can work in any language that you want and use any resources—Google, external libraries, etc—that
-you think will help you solve the problem.
+## Features
 
-# Parts and Deliverables
+### Parsing
 
-This challenge has two parts and two deliverables:
+#### Issues
+
+#### Improvements
+
+### NLP
+
+#### Custom Lexicon
+
+##### Issues
+Speed dropped from 102644.332ms to 309240.709ms, i.e. 1.7 minutes to 5.1 minutes
+
+##### Improvements
+Artists parsing improved in headers. For example, the following is a list of accuracy
+
+```
+wayne => Lil Wayne
+```
+
+
+#### Machine Learning
+Models can be continuosly trained
+
+### Analysis
+
+#### Attribution Algorithm
+
+##### Issues
+Given a song with a primary artist `primary` and `s` number of sections, each with their own headers, attribution analysis currently attributes all sections to the primary artist, as well as to the collaborating artists parsed from the headers.
+
+##### Improvements
+The solutions attributes all sections to the primary, as stated above. But an improvement in the algorithm could add a clause circumventing an increment of section attributions if the header does not contain the name of the primary artist.
+
+### Testing
+
+The streaming parsing, and analysis pipeline can be tested using jest. 
+
+At decreasing scales, from 5M to 2K, to 10 songs, the pipeline runs faster, allowing for developers to iterate on code without having to process the entire scale of the given stream.
+
+#### `analyzeSample = ({RANDOM = false, SAMPLE_SIZE = 10, STREAM_SIZE = 2000} = {})`
+
+The analysis pipeline accepts arguments for `SAMPLE_SIZE`. Given a `STREAM_SIZE`, the pipeline will be transformed to a subset of `SAMPLE_SIZE` songs. 
+
+These songs can be `RANDOM` or, by default, the first `SAMPLE_SIZE` songs of the input stream.
+
+## Dashboard 
+
+### Storage
+noSQL document could store a dump of the top 5 artists for a defined set of metrics to be accessed by a dashboard
+
+### API
+Node microservice could respond to requests for metrics
+
+### Front End Microservice
+Dashboard UI can be independently deployed. It would send authenticated queries to the API and render charts of the metrics
+
+## Issues 
+
+# Problem Statement
+
 
 - Write a program to analyze a data set we’ll provide to you and print out answers to specific questions about that data
 
-    - For this part you should submit the source code you wrote to analyze the data and any instructions that we’d need to
-be able to run that code ourselves to check your work.
+    - For this part you should submit the source code you wrote to analyze the data and any instructions that we’d need to be able to run that code ourselves to check your work.
 
     - You should also submit a text file called output.txt with the output of your program.
 
@@ -33,7 +89,7 @@ In part 2 , we’ll evaluate you answer based on:
 
 - Your high level understanding of the types of issues that you might run into while scaling out this solution, and how you might approach those issues.
 
-# Part 1 : The most lyrically prolific artist
+## Part 1 : The most lyrically prolific artist
 
 At Genius we spend a lot of time coercing unstructured user generated content into structured data that we can use en‑masse to gain insights about music.
 
@@ -45,7 +101,7 @@ We’ve provided a sample dataset to you called songs.json. This file is a newli
 id, lyrics_text, primary_artist, title, and url.
 ```
 
-## Question 1: Primary artists with the most “lyric sections”
+### Question 1: Primary artists with the most “lyric sections”
 
 To help frame the problem let’s look at the (abbreviated) lyrics of Old Town Road (Remix) by Lil Nas X featuring Billy Ray Cyrus:
 
@@ -60,7 +116,7 @@ If we attribute each lyric section within a song’s lyrics to the primary artis
 
 For example, in the "Old Town Road" example above, we would attribute the three lyric sections to Lil Nas X since he is the primary artist even though there are other performers on the song.
 
-## Question 2 : Artists who have performed the most lyrics sections
+### Question 2 : Artists who have performed the most lyrics sections
 
 In real life the primary artist doesn’t always perform all of the sections of a song. There may be other featured artists that perform one or more sections as well, or the artist might actually be a group of performers that perform separate parts of the song.
 
@@ -92,7 +148,7 @@ E.g. folks are supposed to write `Chorus` in section headers but sometimes peopl
 
 Sometimes multiple artists are split up as they were in the example above, via commas and ampersands. But other times artists may be delimited in other ways, e.g. `Drake + 2 Chainz`.
 
-## Question 3 : Artists who have performed the most unique words
+### Question 3 : Artists who have performed the most unique words
 
 In the previous section we attributed individual lyrics sections to the performers of those sections. But maybe we can do even better than that: if we really want to know who the most lyrically prolific artist is we should figure out which artists have used the most unique words in their performances.
 
@@ -113,7 +169,7 @@ Insofar as there are non‑English language characters in this dataset, you may 
 
 You should look at the data set and think about other ways you might normalize words to get a good uniqueness count, but as with the previous section do your best but don’t worry about tracking down every last edge case.
 
-# Part 2 : Scaling up and deploying these aggregates
+## Part 2 : Scaling up and deploying these aggregates
 
 The data set we provided you has 2,000 songs, but Genius’s database includes nearly 5 million songs. 
 
