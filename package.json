@@ -5,6 +5,7 @@
     "test": "tests"
   },
   "dependencies": {
+    "compromise": "^11.14.2",
     "stream-chain": "uhop/stream-chain",
     "stream-json": "uhop/stream-json"
   },
@@ -25,6 +26,8 @@
   },
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
+    "prof": "nodemon --prof --exec babel-node src/index.js",
+    "flameb": "node --prof-process --preprocess -j isolate*.log | flamebearer",
     "test": "jest"
   },
   "keywords": [],
