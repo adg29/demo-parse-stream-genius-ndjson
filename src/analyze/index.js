@@ -11,16 +11,19 @@ const analysisSchema = {
     artistAttributions: {},
     artistWords: {},
     collaborators: {},
-    headers: []
+    headers: {}
 }
 
 export const analyzeSongs = () => {
     return fold((analysisAggregate, {key, value}) => {
-
+        console.log('analysisAggregate')
+        console.log(analysisAggregate)
         let song = value
         let attributions = analysisAggregate.artistAttributions
         let collaborators = analysisAggregate.collaborators
         let headers = analysisAggregate.headers
+
+        let headersMatched = null
         if (song) {
             // console.log(`${key} song ${song.title}`) 
 
@@ -34,9 +37,15 @@ export const analyzeSongs = () => {
             }
 
             console.time('Matched headers in')
-            let headersMatched = matchHeaders(song.lyrics_text)
+            headersMatched = matchHeaders(song.lyrics_text)
             console.log(`${headersMatched.length} headers in ${song.title}`)
-            headers.concat(headersMatched)
+            headersMatched.forEach(header => {
+                if (headers[header]) {
+                    headers[header] += 1
+                } else {
+                    headers[header] = 1
+                }
+            })
             console.timeEnd('Matched headers in')
 
             console.time('Predicted collaborators from headers in')
@@ -48,10 +57,9 @@ export const analyzeSongs = () => {
                     collaborators[featured] = 1
                 }
             })
-            console.log(`${predictions.length} from ${headersMatched.join("\n")}`)
-            console.log(`${JSON.stringify(predictions, null, 5)}`)
+            // console.log(`${predictions.length} from ${headersMatched.join("\n")}`)
+            // console.log(`${JSON.stringify(predictions, null, 5)}`)
             console.timeEnd('Predicted collaborators from headers in')
-
 
             analysisAggregate.songs++
         } else {
@@ -59,7 +67,8 @@ export const analyzeSongs = () => {
         }
 
         return {
-           artistAttributions: attributions,
+           'artistAttributions': attributions,
+           'headers': headers,
            ...analysisAggregate
         }
     }, Object.assign({}, analysisSchema))
