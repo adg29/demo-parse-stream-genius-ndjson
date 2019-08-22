@@ -2,7 +2,7 @@
 
 
 import { processJSON } from './stream'
-import { analyzeSongs } from './analyze'
+import { analyzeSongs, analyzeSample } from './analyze'
 import path from 'path'
 
 const run = async () => {
@@ -19,12 +19,12 @@ const run = async () => {
 
     let msg = `Processing json ${filename}...`
     console.log(msg)
-    let { jsonAnalysis } = await processJSON(filepath, { analyzeSongs })
+
+    let { jsonAnalysis } = await processJSON(filepath, { analyzeSongs, analyzeSample })
 
     let attributions = jsonAnalysis.artistAttributions
 
     msg = `Artist attribution counts: ${JSON.stringify(attributions, null, 5)}`
-    console.log(msg)
 
     let attributionsRanked = Object.keys(attributions)
         .sort((a, b) => attributions[b] - attributions[a])
@@ -32,6 +32,8 @@ const run = async () => {
 
     msg = `Ranked artist by attributions count: ${JSON.stringify(attributionsRanked.slice(0, 5), null, 5)}`
     console.log(msg)
+
+    renderCollaboratorsAnalysis()
 
     msg = `Processed ${jsonAnalysis.songs} objects via ${filename} stream`
     console.log(msg)

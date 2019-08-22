@@ -64,3 +64,17 @@ export const analyzeSongs = () => {
         }
     }, Object.assign({}, analysisSchema))
 }
+
+
+export const sampleIndices = new Set();
+while(sampleIndices.size !== 10) {
+  sampleIndices.add(Math.floor(Math.random() * 2000) + 1);
+}
+
+export const analyzeSample = () => {
+    return ({key, value}) => {
+        if (sampleIndices.has(key)) return {key, value}
+        else return null
+    }
+}
+

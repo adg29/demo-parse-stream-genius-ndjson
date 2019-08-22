@@ -8,7 +8,7 @@ const { streamArray } = require('stream-json/streamers/StreamArray')
 
 const TIME_LABEL = 'Processed json stream pipeline in' 
 
-export function processJSON(filepath, { analyzeSongs }) {
+export function processJSON(filepath, { analyzeSongs, analyzeSample }) {
     console.time(TIME_LABEL)
     return new Promise((resolve, reject) => {
         let jsonAnalysis = null
@@ -18,6 +18,7 @@ export function processJSON(filepath, { analyzeSongs }) {
             dataStreamSource,
             parser(),
             streamArray(),
+            analyzeSample(),
             analyzeSongs(),
             new Transform({
                 writableObjectMode: true,
