@@ -1,5 +1,10 @@
 # Scaling the analysis of song metadata
 
+# Streaming
+
+The solution utses `stream-json` module to define a JSON processing pipelinewith a minimal memory footprint. Optimizing runtime memory by not using streaming primitives of javascript is an optimization that addresses scale issues.
+
+
 # Parsing
 
 ## Dataset Sanitization
@@ -23,8 +28,11 @@ Better yet, switching `stream-json` for a module that supports `ndjson` would  b
 
 ## Speed
 
+### Issues
+Matching requires regular expressions. The `compromise` module is used to facilitate matching. There is also some slower javascript regular expressions sprinkled in. Early iterations saw processing time increase by 8 seconds with the addition of regex matching.
+
 ### Improvements
-Utlizing compiled regex would result in faster processing of sections and headers.
+ Utlizing compiled regex would result in faster processing of sections and headers. Full coverage of optimized matching would benefit the speed of parsing at scale.
 
 # NLP
 
