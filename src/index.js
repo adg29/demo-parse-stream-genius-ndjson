@@ -22,9 +22,9 @@ const run = async () => {
 
     let { jsonAnalysis } = await processJSON(filepath, { analyzeSongs, analyzeSample })
 
-    renderArtistAnalysis(jsonAnalysis.artistAttributions)
+    renderArtistAnalysis(jsonAnalysis)
     renderCollaboratorsAnalysis(jsonAnalysis.collaborators)
-    renderHeaders(jsonAnalysis.headers)
+    // renderHeaders(jsonAnalysis.headers)
 
     msg = `Processed ${jsonAnalysis.songs} objects via ${filename} stream`
     console.log(msg)
@@ -46,7 +46,7 @@ const renderHeaders = (headers) => {
 const renderCollaboratorsAnalysis = (collaborators) => {
 
     let msg = `Collaborator attribution counts: ${JSON.stringify(collaborators, null, 5)}`
-    console.log(msg)
+    // console.log(msg)
 
     let collaboratorsAttributionsRanked = attributionsRanked(collaborators)
 
@@ -55,13 +55,16 @@ const renderCollaboratorsAnalysis = (collaborators) => {
 
 }
 
-const renderArtistAnalysis = (attributions) => {
+const renderArtistAnalysis = ({artistAttributions: attributions, artistTerms: terms}) => {
 
     let msg = `Artist attribution counts: ${JSON.stringify(attributions, null, 5)}`
 
     let artistAttributionsRanked = attributionsRanked(attributions)
 
     msg = `Ranked artist by attributions count: ${JSON.stringify(artistAttributionsRanked.slice(0, 5), null, 5)}`
+    console.log(msg)
+
+    msg = `Terms by artist count: ${JSON.stringify(terms, null, 5)}`
     console.log(msg)
 }
 
