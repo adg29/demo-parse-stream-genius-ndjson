@@ -8,8 +8,7 @@ export const matchSections = (separatedText) => {
 }
 
 export const countSections = (separatedText) => {
-    let sections = matchSections(separatedText)
-    return sections.length
+    return (separatedText.match(BLOCK_DELIMITER_REGEX) || []).length
 }
 
 export const attributeSections = (data) => {
