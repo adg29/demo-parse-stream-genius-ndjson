@@ -2,10 +2,10 @@
 
 
 import { processJSON } from './stream'
-import { analyzeSongs, analyzeSample } from './analyze'
+import { analyzeSongs } from './analyze'
 import path from 'path'
 
-const run = async () => {
+const run = async (config) => {
 
     const TIME_LABEL = 'Finished in' 
     console.time(TIME_LABEL)
@@ -20,7 +20,7 @@ const run = async () => {
     let msg = `Processing json ${filename}...`
     console.log(msg)
 
-    let { jsonAnalysis } = await processJSON(filepath, { analyzeSongs, analyzeSample })
+    let { jsonAnalysis } = await processJSON(filepath, { analyzeSongs, config })
 
     renderArtistAnalysis(jsonAnalysis)
     renderCollaboratorsAnalysis(jsonAnalysis.collaborators)
@@ -46,7 +46,7 @@ const renderHeaders = (headers) => {
 const renderCollaboratorsAnalysis = (collaborators) => {
 
     let msg = `Collaborator attribution counts: ${JSON.stringify(collaborators, null, 5)}`
-    // console.log(msg)
+    console.log(msg)
 
     let collaboratorsAttributionsRanked = attributionsRanked(collaborators)
 
@@ -77,7 +77,12 @@ const renderArtistAnalysis = ({artistAttributions: attributions, artistTerms: te
 }
 
 try {
-    run()
+    const config = {
+        RANDOM: true,
+        SAMPLE_SIZE: 10
+        // SAMPLE_SIZE: 2000
+    }
+    run(config)
 } catch(err) {
     console.error(err);
 }

@@ -8,7 +8,7 @@ const { streamArray } = require('stream-json/streamers/StreamArray')
 
 const TIME_LABEL = 'Processed json stream pipeline in' 
 
-export function processJSON(filepath, { analyzeSongs, analyzeSample }) {
+export function processJSON(filepath, { analyzeSongs, config }) {
     console.time(TIME_LABEL)
     return new Promise((resolve, reject) => {
         let jsonAnalysis = null
@@ -18,9 +18,7 @@ export function processJSON(filepath, { analyzeSongs, analyzeSample }) {
             dataStreamSource,
             parser(),
             streamArray(),
-            analyzeSample({
-                SAMPLE_SIZE: 20,
-            }),
+            sampleJSON(config),
             analyzeSongs(),
             new Transform({
                 writableObjectMode: true,
@@ -53,3 +51,23 @@ export function processJSON(filepath, { analyzeSongs, analyzeSample }) {
 
     })
 }
+
+export const sampleJSON = ({RANDOM = false, SAMPLE_SIZE = 10, STREAM_SIZE = 2000} = {}) => {
+    if (RANDOM) {
+        const sampleIndices = new Set();
+        while(sampleIndices.size !== SAMPLE_SIZE) {
+          sampleIndices.add(Math.floor(Math.random() * STREAM_SIZE) + 1);
+        }
+
+        return ({key, value}) => {
+            if (sampleIndices.has(key)) return {key, value}
+            else return null
+        }
+    } else {
+        return ({key, value}) => {
+            if (key < SAMPLE_SIZE) return {key, value}
+            else return null
+        }
+    }
+}
+

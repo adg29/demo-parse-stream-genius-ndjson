@@ -43,7 +43,6 @@ export const analyzeSongs = () => {
                 attributions[artist] = sections.length
             }
 
-            //attribute collaborators per section
             sections.forEach((section, i) => {
                 // console.time(`Tokenized section ${i} in`)
                 let sectionTerms = nlp(section).terms().out('array')
@@ -69,7 +68,7 @@ export const analyzeSongs = () => {
                 let { persons } = nlpArtists(headersMatched.join("\n"), nlp)
                 persons.forEach(featured => {
                     //increment collaborators entry for person, attributing them this section
-                    if (persons[featured]) {
+                    if (collaborators[featured]) {
                         collaborators[featured] += 1
                     } else {
                         collaborators[featured] = 1
@@ -116,25 +115,3 @@ export const analyzeSongs = () => {
         }
     }, Object.assign({}, analysisSchema))
 }
-
-
-
-export const analyzeSample = ({RANDOM = false, SAMPLE_SIZE = 10, STREAM_SIZE = 2000} = {}) => {
-    if (RANDOM) {
-        const sampleIndices = new Set();
-        while(sampleIndices.size !== SAMPLE_SIZE) {
-          sampleIndices.add(Math.floor(Math.random() * STREAM_SIZE) + 1);
-        }
-
-        return ({key, value}) => {
-            if (sampleIndices.has(key)) return {key, value}
-            else return null
-        }
-    } else {
-        return ({key, value}) => {
-            if (key < SAMPLE_SIZE) return {key, value}
-            else return null
-        }
-    }
-}
-
