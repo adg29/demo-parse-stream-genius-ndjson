@@ -1,7 +1,7 @@
 # Quick Start
 
 1. `npm i`
-2. `npm run start -- --sample-size 20`
+2. `npm run start -- --sample-size 20` or `npm run random -- --sample-size 20`
 
 
 # Scaling the analysis of song metadata
@@ -184,4 +184,4 @@ The process for reconciling new song data into the analysis could be realtime. E
 
 ## Further Enhancements
 
-Time travel would be an interesting feature to introduce to the dashboard. That is to say, allowing an end user to choose a date for which they are interested in viewing a snapshot of the top 5 metrics on the chosen date. This would require the data pipeline to be archived given certain conditions (such as a archive interval) and stored independently of the cache representing the "real time" top 5 metrics.
+Time travel would be an interesting feature to introduce to the dashboard. That is to say, allowing an end user to choose a date for which they are interested in viewing a snapshot of the top 5 metrics on the chosen date. This would require a process for storing a snapshot certain conditions (such as a snapshot interval). This would be be stored independently of the cache representing the "real time" top 5 metrics but utilize be displaed with the same UI rendering logic as the "real time" dashboard.
