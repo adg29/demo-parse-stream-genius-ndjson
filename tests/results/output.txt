@@ -1,0 +1,69 @@
+Processed json stream pipeline in: 1041137.239ms
+Ranked artist by attributions count: [
+     {
+          "artist": "Kanye West",
+          "attributions": 545
+     },
+     {
+          "artist": "Eminem",
+          "attributions": 514
+     },
+     {
+          "artist": "Drake",
+          "attributions": 413
+     },
+     {
+          "artist": "Travis Scott",
+          "attributions": 355
+     },
+     {
+          "artist": "Kendrick Lamar",
+          "attributions": 311
+     }
+]
+Ranked artists by terms count: [
+     {
+          "artist": "eminem",
+          "count": 5949
+     },
+     {
+          "artist": "kendrick lamar",
+          "count": 4066
+     },
+     {
+          "artist": "lil wayne",
+          "count": 3829
+     },
+     {
+          "artist": "kanye west",
+          "count": 3596
+     },
+     {
+          "artist": "jay z",
+          "count": 3175
+     }
+]
+Ranked collaborators by attributions count: [
+     {
+          "artist": "kanye west",
+          "attributions": 327
+     },
+     {
+          "artist": "drake",
+          "attributions": 321
+     },
+     {
+          "artist": "lil wayne",
+          "attributions": 305
+     },
+     {
+          "artist": "eminem",
+          "attributions": 303
+     },
+     {
+          "artist": "young thug",
+          "attributions": 298
+     }
+]
+Processed 2000 objects via ../data/songs.json stream
+Finished in: 1041185.629ms
