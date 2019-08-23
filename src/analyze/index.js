@@ -41,12 +41,14 @@ export const analyzeSongs = () => {
 
             //attribute collaborators per section
             sections.forEach((section, i) => {
-                console.time(`Tokenized section ${i}`)
-                console.timeEnd(`Tokenized section ${i}`)
+                console.time(`Tokenized section ${i} in`)
+                let terms = nlp(section).terms().out('freq')
+                console.log(JSON.stringify(terms, null, 5))
+                console.timeEnd(`Tokenized section ${i} in`)
 
                 console.time(`Matched headers in section ${i}`)
                 headersMatched = matchHeaders(section)
-                console.log(`${headersMatched.length} headers in ${song.title}`)
+                // console.log(`${headersMatched.length} headers in ${song.title}`)
 
                 //global headers store
                 headersMatched.forEach(header => {
@@ -58,18 +60,18 @@ export const analyzeSongs = () => {
                 })
                 console.timeEnd(`Matched headers in section ${i}`)
 
-                console.time('Predicted collaborators from headers in')
-                let { predictions } = nlpArtists(headersMatched.join("\n"), nlp)
-                predictions.forEach(featured => {
-                    if (collaborators[featured]) {
+                console.time('Collaborators recognized from headers in')
+                let { persons } = nlpArtists(headersMatched.join("\n"), nlp)
+                persons.forEach(featured => {
+                    if (persons[featured]) {
                         collaborators[featured] += 1
                     } else {
                         collaborators[featured] = 1
                     }
                 })
-                console.log(`${predictions.length} from ${headersMatched.join("\n")}`)
-                console.log(`${JSON.stringify(predictions, null, 5)}`)
-                console.timeEnd('Predicted collaborators from headers in')
+                // console.log(`${persons.length} from ${headersMatched.join("\n")}`)
+                // console.log(`${JSON.stringify(persons, null, 5)}`)
+                console.timeEnd('Collaborators recognied from headers in')
 
             })
 
