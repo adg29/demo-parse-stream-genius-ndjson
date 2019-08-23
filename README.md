@@ -1,68 +1,129 @@
 # Scaling the analysis of song metadata
 
-## Features
+# Parsing
 
-### Parsing
+## Dataset Sanitization
 
-#### Issues
+### Issues
+Manual transformation of the given `ndsjon` into a json array was done to comply with the `stream-json` streaming module.
 
-#### Improvements
+### Improvements
+Programatically transforming `ndsjon` before streaming into `stream-json` would remove the depenency on manual work. This mitigates work that is tedious, and prone to mistakes, which can be costly at scale.
 
-### NLP
+Better yet, switching `stream-json` for a module that supports `ndjson` would  be ideal.
 
-#### Custom Lexicon
+## Accuracy
 
-##### Issues
-Speed dropped from 102644.332ms to 309240.709ms, i.e. 1.7 minutes to 5.1 minutes
+### Issues
+1. This iteration of the solution assumes sections of songs are all tagged with headers. Thus a section with not headers is lumped into the previous section. This could cause attribution accuracy errors wherein the section with no heades is attributed to the collaborators of the previous section, instead of the `primary_artist`
 
-##### Improvements
-Artists parsing improved in headers. For example, the following is a list of accuracy
+### Improvements
+1. Matching sections without headers occurs via the `mathcSections` method of `src/parse/sections.js`. But attribution should be tested and improved in the `sections.forEach` iterator of `src/stream/index.js`
+
+
+## Speed
+
+### Improvements
+Utlizing compiled regex would result in faster processing of sections and headers.
+
+# NLP
+
+## Unstructured headers data
+
+### Issues
+Normalization of the headers required regex and #Person recognition via NLP. The module `compromise` facilitated the entity recognition.
+
+### Improvements
+Offloading the recognition step to a service such as AWS Comprehend Entity recognition could result in speed and accuracy gains
+
+## Custom Lexicon
+
+### Issues
+Benchmark early in development saw processing speed drop from 102644.332ms to 309240.709ms, i.e. 1.7 minutes to 5.1 minutes after using a custom lexicon
+
+### Improvements
+Artists recognition from header improved. For example, the following is a list of accuracy refinements made by the use of a lexicon
 
 ```
 wayne => Lil Wayne
 ```
 
 
-#### Machine Learning
-Models can be continuosly trained
+## Machine Learning
+NLP Models can be continuosly trained. 
 
-### Analysis
+Transfer pre-training language models downstream tasks.
 
-#### Attribution Algorithm
+External libraries or services can be leveraged to decouple the analysis pipeline from the cost of building and using a smarter tagging engine for artist recognition in unstructure song headers. Here is a list considered during this exercise:
 
-##### Issues
+### Improvements: Depdencies
+- Natural
+- Spacy
+
+### Improvements: Infrastructure
+Serverless NLP would reduce the runtime of the pipeline
+
+- AWS Comprehend
+
+# Analysis
+
+## Speed
+
+### Issues
+Average processing time per song was < 1000ms. 
+Worst case, given 2K songs, the pipeline would need 2M milliseconds i.e. ~33 minutes to complete
+Early cases, given 2K songs, the pipline took 1,069,973 millieseconds i.e. ~17 minutes to complte
+
+Other cases
+```
+milliseconds, minutes
+1041185.629, ~17
+```
+
+
+### Improvements
+Batching 2K songs into one run is too costly in terms of time and memory. Parrel processing (using serverless infrastructure) parsing and recognition stages of the pipeline would offer speed improvements. Once parallel processes are complete, the gateway server could aggregate the result sets from stores written to by the parallel process. These would then be passed through the analysis stages of the pipeline.
+
+## Attribution Algorithm
+
+### Issues
 Given a song with a primary artist `primary` and `s` number of sections, each with their own headers, attribution analysis currently attributes all sections to the primary artist, as well as to the collaborating artists parsed from the headers.
 
-##### Improvements
-The solutions attributes all sections to the primary, as stated above. But an improvement in the algorithm could add a clause circumventing an increment of section attributions if the header does not contain the name of the primary artist.
+### Improvements
+Modifying the algorithm with a clause preventing attribution if the header does not contain the name of the primary artist.
 
-### Testing
+# Testing
 
 The streaming parsing, and analysis pipeline can be tested using jest. 
 
 At decreasing scales, from 5M to 2K, to 10 songs, the pipeline runs faster, allowing for developers to iterate on code without having to process the entire scale of the given stream.
 
-#### `analyzeSample = ({RANDOM = false, SAMPLE_SIZE = 10, STREAM_SIZE = 2000} = {})`
+## Sampling developing facilitates iterative solutions
 
 The analysis pipeline accepts arguments for `SAMPLE_SIZE`. Given a `STREAM_SIZE`, the pipeline will be transformed to a subset of `SAMPLE_SIZE` songs. 
 
-These songs can be `RANDOM` or, by default, the first `SAMPLE_SIZE` songs of the input stream.
+These songs can be `RANDOM` or, by default, the first `SAMPLE_SIZE` songs of the input stream. Defaults are defined in the method signature, below:
 
-## Dashboard 
+`analyzeSample = ({RANDOM = false, SAMPLE_SIZE = 10, STREAM_SIZE = 2000} = {})`
 
-### Storage
+## Performance and load testing
+
+- console.time outputs execution time for blocks of code during development
+- V8 Profiler observes and outputs data and metrics to understand performance of code
+- Flamebearer renders flamegraph which can help identify issues during execution
+
+# Dashboard 
+
+## Storage
 noSQL document could store a dump of the top 5 artists for a defined set of metrics to be accessed by a dashboard
 
-### API
+## API
 Node microservice could respond to requests for metrics
 
-### Front End Microservice
+## Front End Microservice
 Dashboard UI can be independently deployed. It would send authenticated queries to the API and render charts of the metrics
 
-## Issues 
-
 # Problem Statement
-
 
 - Write a program to analyze a data set we’ll provide to you and print out answers to specific questions about that data
 
