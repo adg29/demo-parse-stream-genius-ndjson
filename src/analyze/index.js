@@ -20,7 +20,7 @@ const analysisSchema = {
 export const analyzeSongs = () => {
     return fold((analysisAggregate, {key, value}) => {
         let song = value
-        // console.time(`Analyzed ${key} song ${song.title} in`) 
+        console.time(`Analyzed ${song.primary_artist} in\n`) 
 
         let attributions = analysisAggregate.artistAttributions
         let collaborators = analysisAggregate.collaborators
@@ -45,13 +45,13 @@ export const analyzeSongs = () => {
 
             //attribute collaborators per section
             sections.forEach((section, i) => {
-                console.time(`Tokenized section ${i} in`)
+                // console.time(`Tokenized section ${i} in`)
                 let sectionTerms = nlp(section).terms().out('array')
                 // console.log(`sectionTerms`)
                 // console.log(JSON.stringify(sectionTerms, null, 5))
-                console.timeEnd(`Tokenized section ${i} in`)
+                // console.timeEnd(`Tokenized section ${i} in`)
 
-                console.time(`Matched headers in section ${i}`)
+                // console.time(`Matched headers in section ${i}`)
                 headersMatched = matchHeaders(section)
                 // console.log(`${headersMatched.length} headers in ${song.title}`)
 
@@ -63,9 +63,9 @@ export const analyzeSongs = () => {
                         headers[header] = 1
                     }
                 })
-                console.timeEnd(`Matched headers in section ${i}`)
+                // console.timeEnd(`Matched headers in section ${i}`)
 
-                console.time('Collaborators recognized from headers in')
+                // console.time('Collaborators recognized from headers in')
                 let { persons } = nlpArtists(headersMatched.join("\n"), nlp)
                 persons.forEach(featured => {
                     //increment collaborators entry for person, attributing them this section
@@ -91,7 +91,7 @@ export const analyzeSongs = () => {
                 })
                 // console.log(`${persons.length} from ${headersMatched.join("\n")}`)
                 // console.log(`${JSON.stringify(persons, null, 5)}`)
-                console.timeEnd('Collaborators recognized from headers in')
+                // console.timeEnd('Collaborators recognized from headers in')
 
             })
 
@@ -106,6 +106,7 @@ export const analyzeSongs = () => {
         }, {})
         // console.log(`flattened terms`)
         // console.log(termsWithArrayFromSet)
+        console.timeEnd(`Analyzed ${song.primary_artist} in\n`)
         return {
             'songs': analysisAggregate.songs++,
             'artistAttributions': attributions,
