@@ -1,7 +1,8 @@
 # Quick Start
 
 1. `npm i`
-2. `npm run start`
+2. `npm run start -- --sample-size 20`
+
 
 # Scaling the analysis of song metadata
 
@@ -97,10 +98,30 @@ milliseconds, minutes
 ...
 ```
 
+#### 20 records
+```
+milliseconds, seconds
+10174.880ms, ~10
+14248.226ms, ~14
+12128.469ms, ~12
+11726.787ms, ~11
+11030.764ms, ~11
+10980.603ms, ~10
+...
+...
+```
+
 #### 10 records
 ```
-milliseconds, minutes
-1041185.629, ~17
+milliseconds, seconds
+7744.019ms, ~8
+8155.056ms, ~8
+7050.314ms, ~7
+6073.729ms, ~6
+8226.895ms, ~8
+8339.329ms, ~8
+5973.358ms, ~6
+5658.969ms, ~6
 ...
 ...
 ```
@@ -131,11 +152,11 @@ At decreasing scales, from 5M to 2K, to 10 songs, the pipeline runs faster, allo
 
 ### `analyzeSample`
 
-The analysis pipeline accepts arguments for `SAMPLE_SIZE`. Given a `STREAM_SIZE`, the pipeline will be transformed to a subset of `SAMPLE_SIZE` songs. 
+The analysis pipeline accepts arguments for `--sample-size`. Given a `STREAM_SIZE` (hardcoded for this iteration), the pipeline will be transformed to a subset of `sampleSize` songs. 
 
-These songs can be `RANDOM` or, by default, the first `SAMPLE_SIZE` songs of the input stream. Defaults are defined in the method signature, below:
+These songs are by default, the first `sampleSize` songs of the input stream. They can also be `--random true`. Defaults are defined in the `program.option` block of `src/index.js` and used in the method signature, below:
 
-`analyzeSample = ({RANDOM = false, SAMPLE_SIZE = 10, STREAM_SIZE = 2000} = {})`
+`analyzeSample = ({random = false, sampleSize = 10, streamSize = 2000} = {})`
 
 ## Performance and load testing
 
@@ -163,4 +184,4 @@ The process for reconciling new song data into the analysis could be realtime. E
 
 ## Further Enhancements
 
-Time travel would be an interesting feature to introduce to the dashboard. That is to say, allowing an end user to choose a date for which they are interested in viewing a snapshot of the top 5 metrics on the chosen date. This would require the data pipeline to be cloned given certain conditions (such as refresh interval) and stored independently of the cache representing the "real time" top 5 metrics.
+Time travel would be an interesting feature to introduce to the dashboard. That is to say, allowing an end user to choose a date for which they are interested in viewing a snapshot of the top 5 metrics on the chosen date. This would require the data pipeline to be archived given certain conditions (such as a archive interval) and stored independently of the cache representing the "real time" top 5 metrics.
