@@ -20,4 +20,6 @@ describe('Section Parser', () => {
         let attribution = attributeSections(SONGS.ARTISTS.INVALID)
         expect(attribution).toBeNull()
     })
+    xit('matchSections finds section with no section header at all')
+    xit('attributeSectionWords increments word count by 1 for #Artist that uses #Word across different sections')
 })
