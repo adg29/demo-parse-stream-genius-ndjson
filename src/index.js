@@ -78,9 +78,9 @@ const renderArtistAnalysis = ({artistAttributions: attributions, artistTerms: te
 
 try {
     const config = {
-        RANDOM: true,
-        SAMPLE_SIZE: 10
-        // SAMPLE_SIZE: 2000
+        // RANDOM: true,
+        // SAMPLE_SIZE: 10
+        SAMPLE_SIZE: 2000
     }
     run(config)
 } catch(err) {
