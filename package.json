@@ -5,11 +5,13 @@
     "test": "tests"
   },
   "dependencies": {
+    "commander": "^3.0.0",
     "compromise": "^11.14.2",
     "stream-chain": "uhop/stream-chain",
     "stream-json": "uhop/stream-json"
   },
   "devDependencies": {
+    "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
@@ -26,6 +28,7 @@
   },
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
+    "random": "nodemon --exec babel-node src/index.js --random",
     "prof": "nodemon --prof --exec babel-node src/index.js",
     "flameb": "node --prof-process --preprocess -j isolate*.log | flamebearer",
     "test": "jest"
