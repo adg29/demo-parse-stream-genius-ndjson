@@ -1,16 +1,16 @@
 'use strict'
 
-
 import { processJSON } from './stream'
 import { analyzeSongs } from './analyze'
 import path from 'path'
+
+const filename = '../data/songs.json'
 
 const run = async (config) => {
 
     const TIME_LABEL = 'Finished in' 
     console.time(TIME_LABEL)
 
-    let filename = '../data/songs.json'
     let filepath = path.join(__dirname, filename)
 
     const artists = []
@@ -76,11 +76,22 @@ const renderArtistAnalysis = ({artistAttributions: attributions, artistTerms: te
     console.log(msg)
 }
 
+const commander = require('commander');
+const program = new commander.Command();
+program.version('1.0,0');
+
+program
+    .option('-r, --random', 'randomly pick stream objects')
+    .option('-s, --sample-size <number>', 'sample subset of stream objects', (v, p) => parseInt(v) ,10)
+
+
 try {
+    program.parse(process.argv);
+
+    let { random , sampleSize } = program
     const config = {
-        // RANDOM: true,
-        // SAMPLE_SIZE: 10
-        SAMPLE_SIZE: 2000
+        random,
+        sampleSize
     }
     run(config)
 } catch(err) {

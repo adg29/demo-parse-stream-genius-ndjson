@@ -52,11 +52,11 @@ export function processJSON(filepath, { analyzeSongs, config }) {
     })
 }
 
-export const sampleJSON = ({RANDOM = false, SAMPLE_SIZE = 10, STREAM_SIZE = 2000} = {}) => {
-    if (RANDOM) {
+export const sampleJSON = ({random = false, sampleSize = 10, streamSize = 2000} = {}) => {
+    if (random) {
         const sampleIndices = new Set();
-        while(sampleIndices.size !== SAMPLE_SIZE) {
-          sampleIndices.add(Math.floor(Math.random() * STREAM_SIZE) + 1);
+        while(sampleIndices.size !== sampleSize) {
+          sampleIndices.add(Math.floor(Math.random() * streamSize) + 1);
         }
 
         return ({key, value}) => {
@@ -65,7 +65,7 @@ export const sampleJSON = ({RANDOM = false, SAMPLE_SIZE = 10, STREAM_SIZE = 2000
         }
     } else {
         return ({key, value}) => {
-            if (key < SAMPLE_SIZE) return {key, value}
+            if (key < sampleSize) return {key, value}
             else return null
         }
     }
