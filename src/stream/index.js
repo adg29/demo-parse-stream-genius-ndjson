@@ -19,7 +19,6 @@ export function processJSON(filepath, { analyzeSongs, analyzeSample }) {
             parser(),
             streamArray(),
             analyzeSample({
-                RANDOM: true,
                 SAMPLE_SIZE: 20,
             }),
             analyzeSongs(),

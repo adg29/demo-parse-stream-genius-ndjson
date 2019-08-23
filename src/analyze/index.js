@@ -1,5 +1,9 @@
 'use strict'
 
+const nlp = require('compromise')
+const LEXICON = {ARTISTS: require('../../data/lexicon-artists') }
+nlp.plugin(LEXICON.ARTISTS)
+
 import fold from 'stream-chain/utils/fold'
 import { attributeSections, matchSections, countSections } from '../parse/sections'
 import { matchHeaders } from '../parse/headers'
@@ -37,11 +41,14 @@ export const analyzeSongs = () => {
 
             //attribute collaborators per section
             sections.forEach((section, i) => {
+                console.time(`Tokenized section ${i}`)
+                console.timeEnd(`Tokenized section ${i}`)
+
                 console.time(`Matched headers in section ${i}`)
                 headersMatched = matchHeaders(section)
                 console.log(`${headersMatched.length} headers in ${song.title}`)
 
-                //global headers store, sans nlp
+                //global headers store
                 headersMatched.forEach(header => {
                     if (headers[header]) {
                         headers[header] += 1
@@ -52,7 +59,7 @@ export const analyzeSongs = () => {
                 console.timeEnd(`Matched headers in section ${i}`)
 
                 console.time('Predicted collaborators from headers in')
-                let { predictions } = nlpArtists(headersMatched.join("\n"))
+                let { predictions } = nlpArtists(headersMatched.join("\n"), nlp)
                 predictions.forEach(featured => {
                     if (collaborators[featured]) {
                         collaborators[featured] += 1
