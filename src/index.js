@@ -65,6 +65,14 @@ const renderArtistAnalysis = ({artistAttributions: attributions, artistTerms: te
     console.log(msg)
 
     msg = `Terms by artist count: ${JSON.stringify(terms, null, 5)}`
+    // console.log(msg)
+
+    const setsRanked = (sets) => {
+        return Object.keys(sets)
+            .sort((a, b) => sets[b].length - sets[a].length)
+            .map(a => ({artist: a, 'count': sets[a].length}))
+    }
+    msg = `Ranked artists by terms count: ${JSON.stringify(setsRanked(terms).slice(0,5), null, 5)}`
     console.log(msg)
 }
 
